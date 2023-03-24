@@ -69,9 +69,10 @@ contexts:
     - match: '\b[[:alpha:]_][[:alnum:]_-]*!?(?=\[|\()'
       comment: Function name
       scope: entity.name.function.typst
-    - match: '(?<=\bshow\s*)\b[[:alpha:]_][[:alnum:]_-]*(?=\s*[:.])'
+    - match: '(?<=\bshow)\s*(\b[[:alpha:]_][[:alnum:]_-]*)(?=\s*[:.])'
       comment: Function name
-      scope: entity.name.function.typst
+      captures:
+        1: entity.name.function.typst
     - match: '(?<=\b[[:alpha:]_][[:alnum:]_-]*!?)\('
       comment: Function arguments
       captures:
@@ -264,10 +265,11 @@ contexts:
       scope: keyword.other.typst
       captures:
         1: punctuation.definition.keyword.typst
-    - match: '((#)if|(?<=(}|])\s*)else)\b'
+    - match: '((#)(if)|(?<=(}|]))\s*(else))\b'
       captures:
-        0: keyword.control.conditional.typst
         2: punctuation.definition.keyword.typst
+        3: keyword.control.conditional.typst
+        5: keyword.control.conditional.typst
       push:
         - match: \n|(?=])|(?<=}|])
           pop: true
