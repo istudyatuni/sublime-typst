@@ -110,7 +110,7 @@ contexts:
         0: punctuation.definition.comment.typst
       push:
         - meta_scope: comment.line.double-slash.typst
-        - match: ''
+        - match: '\n'
           pop: true
         - include: comments
   common:
