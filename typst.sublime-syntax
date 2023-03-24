@@ -1,0 +1,335 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/syntax.html
+name: typst
+file_extensions:
+  - typ
+scope: source.typst
+contexts:
+  main:
+    - include: markup
+  arguments:
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*(?=:)'
+      scope: variable.parameter.typst
+    - include: code
+  code:
+    - include: common
+    - match: '{'
+      captures:
+        0: punctuation.definition.block.code.typst
+      push:
+        - meta_scope: meta.block.code.typst
+        - match: '}'
+          captures:
+            0: punctuation.definition.block.code.typst
+          pop: true
+        - include: code
+    - match: '\['
+      captures:
+        0: punctuation.definition.block.content.typst
+      push:
+        - meta_scope: meta.block.content.typst
+        - match: '\]'
+          captures:
+            0: punctuation.definition.block.content.typst
+          pop: true
+        - include: markup
+    - match: //
+      captures:
+        0: punctuation.definition.comment.typst
+      push:
+        - meta_scope: comment.line.double-slash.typst
+        - match: ''
+          pop: true
+    - match: ':'
+      scope: punctuation.separator.colon.typst
+    - match: ','
+      scope: punctuation.separator.comma.typst
+    - match: '=>|\.\.'
+      scope: keyword.operator.typst
+    - match: '==|!=|<=|<|>=|>'
+      scope: keyword.operator.relational.typst
+    - match: \+=|-=|\*=|/=|=
+      scope: keyword.operator.assignment.typst
+    - match: '\+|\*|/|(?<![[:alpha:]_][[:alnum:]_-]*)-(?![:alnum:]_-]*[[:alpha:]_])'
+      scope: keyword.operator.arithmetic.typst
+    - match: \b(and|or|not)\b
+      scope: keyword.operator.word.typst
+    - match: \b(let|as|in|set|show)\b
+      scope: keyword.other.typst
+    - match: \b(if|else)\b
+      scope: keyword.control.conditional.typst
+    - match: \b(for|while|break|continue)\b
+      scope: keyword.control.loop.typst
+    - match: \b(import|include|export)\b
+      scope: keyword.control.import.typst
+    - match: \b(return)\b
+      scope: keyword.control.flow.typst
+    - include: constants
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*!?(?=\[|\()'
+      comment: Function name
+      scope: entity.name.function.typst
+    - match: '(?<=\bshow\s*)\b[[:alpha:]_][[:alnum:]_-]*(?=\s*[:.])'
+      comment: Function name
+      scope: entity.name.function.typst
+    - match: '(?<=\b[[:alpha:]_][[:alnum:]_-]*!?)\('
+      comment: Function arguments
+      captures:
+        0: punctuation.definition.group.typst
+      push:
+        - match: \)
+          captures:
+            0: punctuation.definition.group.typst
+          pop: true
+        - include: arguments
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*\b'
+      scope: variable.other.typst
+    - match: \(
+      captures:
+        0: punctuation.definition.group.typst
+      push:
+        - meta_scope: meta.group.typst
+        - match: \)|(?=;)
+          captures:
+            0: punctuation.definition.group.typst
+          pop: true
+        - include: code
+  comments:
+    - match: /\*
+      captures:
+        0: punctuation.definition.comment.typst
+      push:
+        - meta_scope: comment.block.typst
+        - match: \*/
+          captures:
+            0: punctuation.definition.comment.typst
+          pop: true
+        - include: comments
+    - match: (?<!:)//
+      captures:
+        0: punctuation.definition.comment.typst
+      push:
+        - meta_scope: comment.line.double-slash.typst
+        - match: ''
+          pop: true
+        - include: comments
+  common:
+    - include: comments
+  constants:
+    - match: \bnone\b
+      scope: constant.language.none.typst
+    - match: \bauto\b
+      scope: constant.language.auto.typst
+    - match: \b(true|false)\b
+      scope: constant.language.boolean.typst
+    - match: '\b(\d*)?\.?\d+([eE][+-]?\d+)?(mm|pt|cm|in|em)\b'
+      scope: constant.numeric.length.typst
+    - match: '\b(\d*)?\.?\d+([eE][+-]?\d+)?(rad|deg)\b'
+      scope: constant.numeric.angle.typst
+    - match: '\b(\d*)?\.?\d+([eE][+-]?\d+)?%'
+      scope: constant.numeric.percentage.typst
+    - match: '\b(\d*)?\.?\d+([eE][+-]?\d+)?fr'
+      scope: constant.numeric.fr.typst
+    - match: \b\d+\b
+      scope: constant.numeric.integer.typst
+    - match: '\b(\d*)?\.?\d+([eE][+-]?\d+)?\b'
+      scope: constant.numeric.float.typst
+    - match: '"'
+      captures:
+        0: punctuation.definition.string.typst
+      push:
+        - meta_scope: string.quoted.double.typst
+        - match: '"'
+          captures:
+            0: punctuation.definition.string.typst
+          pop: true
+        - match: '\\([\\"nrt]|u\{?[0-9a-zA-Z]*\}?)'
+          scope: constant.character.escape.string.typst
+    - match: \$
+      captures:
+        0: punctuation.definition.string.math.typst
+      push:
+        - meta_scope: string.other.math.typst
+        - match: \$
+          captures:
+            0: punctuation.definition.string.math.typst
+          pop: true
+  markup:
+    - include: common
+    - match: '\\([\\/\[\]{}#*_=~`$-.]|u\{[0-9a-zA-Z]*\}?)'
+      scope: constant.character.escape.content.typst
+    - match: \\
+      scope: punctuation.definition.linebreak.typst
+    - match: '~'
+      scope: punctuation.definition.nonbreaking-space.typst
+    - match: '-\?'
+      scope: punctuation.definition.shy.typst
+    - match: '---'
+      scope: punctuation.definition.em-dash.typst
+    - match: '--'
+      scope: punctuation.definition.en-dash.typst
+    - match: \.\.\.
+      scope: punctuation.definition.ellipsis.typst
+    - match: ':([a-zA-Z0-9]+:)+'
+      scope: constant.symbol.typst
+    - match: (^\*|\*$|((?<=\W|_)\*)|(\*(?=\W|_)))
+      captures:
+        0: punctuation.definition.bold.typst
+      push:
+        - meta_scope: markup.bold.typst
+        - match: |-
+            (^\*|\*$|((?<=\W|_)\*)|(\*(?=\W|_)))|
+            |(?=\])
+          captures:
+            0: punctuation.definition.bold.typst
+          pop: true
+        - include: markup
+    - match: (^_|_$|((?<=\W|_)_)|(_(?=\W|_)))
+      captures:
+        0: punctuation.definition.italic.typst
+      push:
+        - meta_scope: markup.italic.typst
+        - match: |-
+            (^_|_$|((?<=\W|_)_)|(_(?=\W|_)))|
+            |(?=\])
+          captures:
+            0: punctuation.definition.italic.typst
+          pop: true
+        - include: markup
+    - match: 'https?://[0-9a-zA-Z~/%#&='',;\.\+\?]*'
+      scope: markup.underline.link.typst
+    - match: '`{3,}'
+      captures:
+        0: punctuation.definition.raw.typst
+      push:
+        - meta_scope: markup.raw.block.typst
+        - match: \0
+          captures:
+            0: punctuation.definition.raw.typst
+          pop: true
+    - match: '`'
+      captures:
+        0: punctuation.definition.raw.typst
+      push:
+        - meta_scope: markup.raw.inline.typst
+        - match: '`'
+          captures:
+            0: punctuation.definition.raw.typst
+          pop: true
+    - match: \$
+      captures:
+        0: punctuation.definition.string.math.typst
+      push:
+        - meta_scope: string.other.math.typst
+        - match: \$
+          captures:
+            0: punctuation.definition.string.math.typst
+          pop: true
+    - match: ^\s*=+\s+
+      captures:
+        0: punctuation.definition.heading.typst
+      push:
+        - meta_scope: markup.heading.typst
+        - meta_content_scope: entity.name.section.typst
+        - match: |-
+
+            |(?=<)
+          pop: true
+        - include: markup
+    - match: ^\s*-\s+
+      scope: punctuation.definition.list.unnumbered.typst
+    - match: '^\s*([0-9]*\.|\+)\s+'
+      scope: punctuation.definition.list.numbered.typst
+    - match: '^\s*(/)\s+([^:]*:)'
+      captures:
+        1: punctuation.definition.list.description.typst
+        2: markup.list.term.typst
+    - match: '<[[:alpha:]_][[:alnum:]_-]*>'
+      scope: entity.other.label.typst
+      captures:
+        1: punctuation.definition.label.typst
+    - match: '(@)[[:alpha:]_][[:alnum:]_-]*'
+      scope: entity.other.reference.typst
+      captures:
+        1: punctuation.definition.reference.typst
+    - match: (#)(let|set|show)\b
+      captures:
+        0: keyword.other.typst
+        1: punctuation.definition.keyword.typst
+      push:
+        - match: |-
+
+            |(;)|(?=])
+          captures:
+            1: punctuation.terminator.statement.typst
+          pop: true
+        - include: code
+    - match: (#)(as|in)\b
+      scope: keyword.other.typst
+      captures:
+        1: punctuation.definition.keyword.typst
+    - match: '((#)if|(?<=(}|])\s*)else)\b'
+      captures:
+        0: keyword.control.conditional.typst
+        2: punctuation.definition.keyword.typst
+      push:
+        - match: |-
+
+            |(?=])|(?<=}|])
+          pop: true
+        - include: code
+    - match: (#)(for|while)\b
+      captures:
+        0: keyword.control.loop.typst
+        1: punctuation.definition.keyword.typst
+      push:
+        - match: |-
+
+            |(?=])|(?<=}|])
+          pop: true
+        - include: code
+    - match: (#)(break|continue)\b
+      scope: keyword.control.loop.typst
+      captures:
+        1: punctuation.definition.keyword.typst
+    - match: (#)(import|include|export)\b
+      captures:
+        0: keyword.control.import.typst
+        1: punctuation.definition.keyword.typst
+      push:
+        - match: |-
+
+            |(;)|(?=])
+          captures:
+            1: punctuation.terminator.statement.typst
+          pop: true
+        - include: code
+    - match: (#)(return)\b
+      scope: keyword.control.flow.typst
+      captures:
+        1: punctuation.definition.keyword.typst
+    - match: '((#)[[:alpha:]_][[:alnum:]_-]*!?)(?=\[|\()'
+      comment: Function name
+      scope: entity.name.function.typst
+      captures:
+        2: punctuation.definition.function.typst
+    - match: '(?<=#[[:alpha:]_][[:alnum:]_-]*!?)\('
+      comment: Function arguments
+      captures:
+        0: punctuation.definition.group.typst
+      push:
+        - match: \)
+          captures:
+            0: punctuation.definition.group.typst
+          pop: true
+        - include: arguments
+    - match: '(#)[[:alpha:]_][.[:alnum:]_-]*'
+      scope: entity.other.interpolated.typst
+      captures:
+        1: punctuation.definition.variable.typst
+    - match: '#'
+      push:
+        - meta_scope: meta.block.content.typst
+        - match: \s
+          pop: true
+        - include: code
