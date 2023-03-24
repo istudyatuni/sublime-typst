@@ -231,9 +231,7 @@ contexts:
       push:
         - meta_scope: markup.heading.typst
         - meta_content_scope: entity.name.section.typst
-        - match: |-
-
-            |(?=<)
+        - match: '\n|(?=<)'
           pop: true
         - include: markup
     - match: ^\s*-\s+
@@ -257,9 +255,7 @@ contexts:
         0: keyword.other.typst
         1: punctuation.definition.keyword.typst
       push:
-        - match: |-
-
-            |(;)|(?=])
+        - match: '\n|(;)|(?=])'
           captures:
             1: punctuation.terminator.statement.typst
           pop: true
@@ -273,9 +269,7 @@ contexts:
         0: keyword.control.conditional.typst
         2: punctuation.definition.keyword.typst
       push:
-        - match: |-
-
-            |(?=])|(?<=}|])
+        - match: \n|(?=])|(?<=}|])
           pop: true
         - include: code
     - match: (#)(for|while)\b
@@ -283,9 +277,7 @@ contexts:
         0: keyword.control.loop.typst
         1: punctuation.definition.keyword.typst
       push:
-        - match: |-
-
-            |(?=])|(?<=}|])
+        - match: '\n|(?=])|(?<=}|])'
           pop: true
         - include: code
     - match: (#)(break|continue)\b
@@ -297,9 +289,7 @@ contexts:
         0: keyword.control.import.typst
         1: punctuation.definition.keyword.typst
       push:
-        - match: |-
-
-            |(;)|(?=])
+        - match: '\n|(;)|(?=])'
           captures:
             1: punctuation.terminator.statement.typst
           pop: true
