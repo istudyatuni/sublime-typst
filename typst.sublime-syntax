@@ -53,7 +53,8 @@ contexts:
       scope: keyword.operator.relational.typst
     - match: \+=|-=|\*=|/=|=
       scope: keyword.operator.assignment.typst
-    - match: '\+|\*|/|(?<!{{varname}}*)-(?![:alnum:]_-]*[[:alpha:]_])'
+    # but I don't know how to workaround for "non-fixed width in negative look-behind pattern"
+    - match: '\+|\*|/|(?<!{{varname}})-(?![:alnum:]_-]*[[:alpha:]_])'
       scope: keyword.operator.arithmetic.typst
     - match: \b(and|or|not)\b
       scope: keyword.operator.word.typst
@@ -71,14 +72,16 @@ contexts:
     - match: '\b{{varname}}*!?(?=\[|\()'
       comment: Function name
       scope: entity.name.function.typst
+    # workaround for "non-fixed width in positive look-behind pattern":
+    # move non-fixed part outside and capture specific group
     - match: '(?<=\bshow)\s*(\b{{varname}}*)(?=\s*[:.])'
       comment: Function name
       captures:
         1: entity.name.function.typst
-    - match: '(?<=\b{{varname}}*!?)\('
+    - match: '(?<=\b){{varname}}*!?(\()'
       comment: Function arguments
       captures:
-        0: punctuation.definition.group.typst
+        1: punctuation.definition.group.typst
       push:
         - match: \)
           captures:
@@ -307,10 +310,10 @@ contexts:
       scope: entity.name.function.typst
       captures:
         2: punctuation.definition.function.typst
-    - match: '(?<=#{{varname}}*!?)\('
+    - match: '(?<=#){{varname}}*!?(\()'
       comment: Function arguments
       captures:
-        0: punctuation.definition.group.typst
+        1: punctuation.definition.group.typst
       push:
         - match: \)
           captures:
