@@ -5,13 +5,11 @@ name: Typst
 file_extensions:
   - typ
 scope: source.typst
-variables:
-  varname: '[[:alpha:]_][[:alnum:]_-]'
 contexts:
   main:
     - include: markup
   arguments:
-    - match: '\b{{varname}}*(?=:)'
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*(?=:)'
       scope: variable.parameter.typst
     - include: code
   code:
@@ -54,7 +52,7 @@ contexts:
     - match: \+=|-=|\*=|/=|=
       scope: keyword.operator.assignment.typst
     # but I don't know how to workaround for "non-fixed width in negative look-behind pattern"
-    - match: '\+|\*|/|(?<!{{varname}})-(?![:alnum:]_-]*[[:alpha:]_])'
+    - match: '\+|\*|/|(?<![[:alpha:]_][[:alnum:]_-])-(?![:alnum:]_-]*[[:alpha:]_])'
       scope: keyword.operator.arithmetic.typst
     - match: \b(and|or|not)\b
       scope: keyword.operator.word.typst
@@ -69,16 +67,16 @@ contexts:
     - match: \b(return)\b
       scope: keyword.control.flow.typst
     - include: constants
-    - match: '\b{{varname}}*!?(?=\[|\()'
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*!?(?=\[|\()'
       comment: Function name
       scope: entity.name.function.typst
     # workaround for "non-fixed width in positive look-behind pattern":
     # move non-fixed part outside and capture specific group
-    - match: '(?<=\bshow)\s*(\b{{varname}}*)(?=\s*[:.])'
+    - match: '(?<=\bshow)\s*(\b[[:alpha:]_][[:alnum:]_-]*)(?=\s*[:.])'
       comment: Function name
       captures:
         1: entity.name.function.typst
-    - match: '(?<=\b){{varname}}*!?(\()'
+    - match: '(?<=\b)[[:alpha:]_][[:alnum:]_-]*!?(\()'
       comment: Function arguments
       captures:
         1: punctuation.definition.group.typst
@@ -88,7 +86,7 @@ contexts:
             0: punctuation.definition.group.typst
           pop: true
         - include: arguments
-    - match: '\b{{varname}}*\b'
+    - match: '\b[[:alpha:]_][[:alnum:]_-]*\b'
       scope: variable.other.typst
     - match: \(
       captures:
@@ -248,11 +246,11 @@ contexts:
       captures:
         1: punctuation.definition.list.description.typst
         2: markup.list.term.typst
-    - match: '<{{varname}}*>'
+    - match: '<[[:alpha:]_][[:alnum:]_-]*>'
       scope: entity.other.label.typst
       captures:
         1: punctuation.definition.label.typst
-    - match: '(@){{varname}}*'
+    - match: '(@)[[:alpha:]_][[:alnum:]_-]*'
       scope: entity.other.reference.typst
       captures:
         1: punctuation.definition.reference.typst
@@ -305,12 +303,12 @@ contexts:
       scope: keyword.control.flow.typst
       captures:
         1: punctuation.definition.keyword.typst
-    - match: '((#){{varname}}*!?)(?=\[|\()'
+    - match: '((#)[[:alpha:]_][[:alnum:]_-]*!?)(?=\[|\()'
       comment: Function name
       scope: entity.name.function.typst
       captures:
         2: punctuation.definition.function.typst
-    - match: '(?<=#){{varname}}*!?(\()'
+    - match: '(?<=#)[[:alpha:]_][[:alnum:]_-]*!?(\()'
       comment: Function arguments
       captures:
         1: punctuation.definition.group.typst
