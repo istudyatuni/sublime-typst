@@ -52,7 +52,7 @@ contexts:
     - match: \+=|-=|\*=|/=|=
       scope: keyword.operator.assignment.typst
     # but I don't know how to workaround for "non-fixed width in negative look-behind pattern"
-    - match: '\+|\*|/|(?<![[:alpha:]_][[:alnum:]_-])-(?![:alnum:]_-]*[[:alpha:]_])'
+    - match: '\+|\|/|(?<![[:alpha:]])(?<!\w)(?<!\d)-(?![[:alnum:]-][[:alpha:]_])'
       scope: keyword.operator.arithmetic.typst
     - match: \b(and|or|not)\b
       scope: keyword.operator.word.typst
@@ -72,7 +72,7 @@ contexts:
       scope: entity.name.function.typst
     # workaround for "non-fixed width in positive look-behind pattern":
     # move non-fixed part outside and capture specific group
-    - match: '(?<=\bshow)\s*(\b[[:alpha:]_][[:alnum:]_-]*)(?=\s*[:.])'
+    - match: '(?:\bshow\s*\b([[:alpha:]][[:alnum:]-])(?=\s[:.]))'
       comment: Function name
       captures:
         1: entity.name.function.typst
@@ -268,11 +268,10 @@ contexts:
       scope: keyword.other.typst
       captures:
         1: punctuation.definition.keyword.typst
-    - match: '((#)(if)|(?<=(}|]))\s*(else))\b'
+    - match: '((#)if|(?<=(}|]))\s*else)\b'
+      scope: keyword.control.conditional.typst
       captures:
         2: punctuation.definition.keyword.typst
-        3: keyword.control.conditional.typst
-        5: keyword.control.conditional.typst
       push:
         - match: \n|(?=])|(?<=}|])
           pop: true
