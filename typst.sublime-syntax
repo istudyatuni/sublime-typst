@@ -51,7 +51,6 @@ contexts:
       scope: keyword.operator.relational.typst
     - match: \+=|-=|\*=|/=|=
       scope: keyword.operator.assignment.typst
-    # but I don't know how to workaround for "non-fixed width in negative look-behind pattern"
     - match: '\+|\|/|(?<![[:alpha:]])(?<!\w)(?<!\d)-(?![[:alnum:]-][[:alpha:]_])'
       scope: keyword.operator.arithmetic.typst
     - match: \b(and|or|not)\b
@@ -70,8 +69,6 @@ contexts:
     - match: '\b[[:alpha:]_][[:alnum:]_-]*!?(?=\[|\()'
       comment: Function name
       scope: entity.name.function.typst
-    # workaround for "non-fixed width in positive look-behind pattern":
-    # move non-fixed part outside and capture specific group
     - match: '(?:\bshow\s*\b([[:alpha:]][[:alnum:]-])(?=\s[:.]))'
       comment: Function name
       captures:
